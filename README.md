@@ -2,6 +2,6 @@
 
 > 운영체제 공부 내용 정리
 
-강의 url <http://www.kocw.net/home/search/kemView.do?kemId=978503>
+강의 url <http://www.kocw.net/home/search/kemView.do?kemId=1046323>
 
-경성대학교 양희제 교수님 (2013)
+이화여자대학교 반효경 교수님 (2014)
