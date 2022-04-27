@@ -108,5 +108,34 @@
   - 실제로는 장기 스케줄러가 없기 때문에 메모리는 일단 주고 그걸 조절하기 위해 중기 스케줄러 사용
   - 여유 공간 마련을 위해 프로세스를 통째로 메모리에서 디스크로 쫓아냄
   - 프로세스에게서 memory를 뺏는 문제
-  - ㅇegree of Multiprogramming을 제어
+  - Degree of Multiprogramming을 제어
 
+
+
+## Thread
+
+- 프로세스 하나에 프로세스 수행 단위를 여러 개 두는 것.
+- A thread(or lightweight process) is a basic unit of CPU utilization
+- Thread의 구성(스레드마다 별도로 가지고 있음)
+  - program counter
+  - register set
+  - stack space
+- Thread가 동료 thread와 공유하는 부분(=task)
+  - code section 
+  - data section
+  - OS resource
+
+- 전통적인 개념의 heavyweight process는 하나의 thread를 가지고 있는 task로 볼 수 있다. 
+- thread 사용의 장점
+  - 다중 스레드로 구성된 태스크 구조에서는 하나의 서버 스레드가 blocked(waiting) 상태인 동안에도 동일한 태스크 내의 다른 스레드가 실행 (running) 되어 빠른 처리를 할 수 있다. 
+  - 동일한 일을 수행하는 다중 스레드가 협력하여 높은 처리율(throughput)과 성능 향상을 얻을 수 있다. 
+  - 스레드를 사용하면 병렬성을 높일 수 있다. (CPU가 여러 개 달린 컴퓨터에서)
+  - 장점 네가지로 정리
+    - Responsiveness(응답성)
+    - Resource Sharing
+    - Economy
+    - Utilization of Multi-Processor Architectures
+- Thread를 구현하는 방법
+  - kernel 또는 library에 의해 구현됨
+    - kernel thread : 스레드가 여러 개 있다는 사실을 운영체제가 알고 있음 
+    - user thread : 라이브러리를 통해 지원됨. 운영체제가 스레드 여러개인걸 몰라서 관리 프로그램이 알아서 관리함. 
