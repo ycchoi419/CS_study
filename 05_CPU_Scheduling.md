@@ -70,7 +70,7 @@
 
 
 
-### SJF ( shortest Job First )
+### SJF ( Shortest Job First )
 
 - 각 프로세스의 다음번 CPU burst time을 가지고 스케줄링에 활용
 - CPU burst time 이 가장 짧은 프로세스를 제일 먼저 스케줄 
@@ -125,6 +125,76 @@
 
 
 
+### Multilevel Queue
+
+- Ready queue를 여러 개로 분할
+  - foreground(interactive, 사용자와 주고 받는게 많음)
+  - backgroudn(batch - no human interaction)
+- 각 큐는 독립적인 스케줄링 알고리즘을 가짐
+  - foreground - RR
+  - background - FIFO
+- 큐에대한 스케줄링이 필요
+  - Fixed priority scheduling
+    - serve all from foreground then from background
+    - Possibility of starvation : priority가 낮으면 영원히 CPU를 얻지 못할 수 있다. 
+  - Time slice
+    - 각 큐별로 적당한 시간을 할당해줌 (priority가 높을 수록 많은 시간)
+
+
+
+### Multilevel Feedback Queue
+
+- 여러 줄로 스케줄링을 하면서 경우에 따라서는 프로세스가 큐 간에 이동을 할 수 있음 
+- 에이징(aging)을 이와 같은 방식으로 구현할 수 있다. 
+- Multilevel-feedback-queue scheduler를 정의하는 파라미터들
+  - queue의 수
+  - 각 큐의 스케줄링 알고리즘
+  - 프로세스를 상위 큐 또는 하위 큐로 보내는 기준
+  - 프로세스가 CPU 서비스를 받으려 할 때 들어갈 큐를 결정하는 기준 
+- 우선순위가 높은 큐는 time quantum이 짧아서 빠르게 끝나는 작업을 처리하고 다 처리하지 못하면 아래 큐로 내려보냄. 아래 큐는 time quantum을 더 길게 준다. 하지만 상위 큐가 다 끝나지 않으면 아래 큐는 CPU를 못받음 
+
+- CPU 사용시간이 짧은 프로세스가 CPU 우선순위를 받음 
+
+
+
+## Multiple-Processor Scheduling
+
+- CPU가 여러 개인 경우 스케줄링(더 복잡해짐)
+- Homogeneous processor인 경우
+  - queue에 한 줄로 세워서 각 프로세서가 알아서 꺼내가게 할 수 있다. 
+  - 반드시 특정 프로세서에서 수행되어야 한느 프로세스가 있는 경우에는 문제가 더 복잡해짐
+- Load sharing
+  - 일부 프로세서에 job이 몰리지 않도록 부하를 적절히 공유하는 메커니즘이 필요
+  - 별개의 큐를 두는 방법 vs 공동 큐를 사용하는 방법
+- Symmetric Multiprocessing (SMP)
+  - 각 프로세서가 각자 알아서 스케줄링 결정
+- Asymmetric multiprocessing
+  - 하나의 프로세서가 시스템 데이터의 접근과 공유를 책임지고 나머지 프로세서는 거기에 따름 
+
+
+
+## Real-Time Scheduling
+
+- 정해진 시간안에 끝내야 하도록 스케줄링
+- Hard real-time systems
+  - hard real-time task는 정해진 시간 안에 반드시 끝내도록 스케줄링 해야함
+- Soft real-time systems
+  - soft real-time task는 일반 프로세스에 비해 높은 priority를 갖도록 해야함
+
+
+
+## Thread Scheduling
+
+- 스레드를 구현하는 방식
+- Local Scheduling
+  - User level thread의 경우 사용자 수준의 thread library에 의해 어떤 thread를 스케줄할지 결정
+  - 운영체제가 스레드의 존재를 모름
+- Global Scheduling
+  - Kernel level thread의 경우 일반 프로세스와 마찬가지로 커널의 단기 스케줄러가 어떤 thread를 스케줄할지 결정
+  - 운영체제가 스레드의 존재를 알고 있음 
+
+
+
 ## Scheduling Criteria
 
 ### Performance Index ( = Performance Measure, 성능 척도 )
@@ -143,3 +213,17 @@
   - Response time(응답 시간)
     - ready queue에 들어와서 처음으로 CPU를 얻는 데 걸리는 시간 ( 처음 CPU 얻었으면 그 다음에 기다리는 건 신경 안씀)
     - 처음으로 응답을 하는 것이 중요한 의미를 가지기 때문
+
+
+
+## Algorithm Evaluation
+
+- 어떤 알고리즘이 좋은지 판단하는 방법
+- Queueing models
+  - 확률 분포로 주어지는 arrival rate(단위 시간당 몇 개의 프로세스 요청이 들어오는지)와 service rate(단위 시간당 몇 개의 프로세스를 처리할 수 있는지)등을 통해 각종 performance index 값을 계산 
+- Implementation(구현) & Measurement(성능 측정)
+  - 실제 시스템에 알고리즘을 구현하여 실제 작업(workload)에 대해서 성능을 측정 비교
+  - 실제로 코드 짜서 돌려보는 것
+- Simulation (모의 실험)
+  - 알고리즘을 모의 프로그램으로 작성 후 trace를 입력으로 하여 비교 
+
