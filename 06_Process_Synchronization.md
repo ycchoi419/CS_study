@@ -92,3 +92,50 @@
 - 데이터를 읽으면서 쓰는 것이 동시에 가능하다면 문제는 간단하게 해결됨 
 - 하드웨어적으로 test & modify를 atomic 하게 수행할 수 있도록 지원하는 경우 앞의 문제는 간단히 해결
 - Test_and_set(a) : a를 읽으면서 동시에 a의 값을 1로 할당함.
+
+
+
+## Semaphore
+
+- 앞의 방식들을 추상화시킴
+- Semaphore S
+  - integer variable
+  - P연산, V 연산 두 가지 과정에 의해 접근 가능
+    - P 연산 : 공유 데이터를 획득하는 과정
+    - V 연산 :  다 쓰고 데이터를 반납하는 과정
+- 추상적으로 연산을 정의하는 것
+- 여기서도 busy waiting 문제가 발생함
+
+
+
+## Block & Wakeup Implementation
+
+- semaphore를 정수값(critical section에 접근할 수 있는 프로세스의 갯수)과 wait queue로 정의
+- block과 wakeup을 다음과 같이 가정
+  - block
+    - 커널은 block을 호출한 프로세스를 suspend시킴 
+    - 이 프로세스의 PCB를 semaphore에 대한 wait queue에 넣음
+  - wakeup(P)
+    - block된 프로세스 P를 wakeup 시킴
+    - 이 프로세스의 PCB를 ready queue로 옮김
+- Semaphore 연산이 다음과 같이 정의됨
+  - P 연산
+    -  S.value 1 빼줌(critical section에 접근할 수 있는 프로세스 갯수)
+    - S.value < 0이 되면 해당 프로세스 block
+  - V(S)
+    - S.value 1더해줌
+    - S.value <=0 이면(기다리는 프로세스가 있으면) 기다리는 프로세스를 ready queue에서 제거하고 wakeup 시킴
+
+> 일반적으로 busy waiting보다 block and wakeup이 효율적이지만 critical section의 길이가 매우 짧은 경우는 반대가 되기도 한다. 
+
+
+
+## Deadlock and Starvation
+
+- Deadlock
+  - 둘 이상의 프로세스가 서로 상대방에 의해 충족될 수 있는 event를 무한히 기다리는 현상
+  - P0, P1 모두 S, Q 두 자원이 필요한데 서로 하나씩 가지고 있는 경우 나머지 하나를 무한히 기다림
+  - 자원 얻는 순서를 맞추면 해결할 수 있음
+- Starvation 
+  - indefinite blocking. 프로세스가 suspend된 이유에 해당하는 semaphore queue에서 빠져나갈 수 없는 현상. 
+
