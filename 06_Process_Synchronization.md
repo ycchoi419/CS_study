@@ -14,7 +14,7 @@
 - kernel 수행 중 인터럽트 발생 시
   - 인터럽트를 disable / enable 하게 해서 해결. 작업이 끝난 다음에 인터럽트 가능하게 함. 
 - process가 system call을 하여 kernel mode로 수행 중인데 context switch가 일어나는 경우
-  - 두 프로세스의 adress space 간에는 data sharing이 없음 
+  - 두 프로세스의 address space 간에는 data sharing이 없음 
   - 그러나 system call 을 하는 동안에는 kernel address space의 data를 access하게 됨(share)
   - 이 작업 중간에 CPU를 preempt해가면 race condition 발생
   - 해결책 : 커널 모드에서 수행 중일 때는 CPU를 preempt하지 않고 다시 사용자모드로 돌아갈 때 preempt되게 한다. 
@@ -139,3 +139,60 @@
 - Starvation 
   - indefinite blocking. 프로세스가 suspend된 이유에 해당하는 semaphore queue에서 빠져나갈 수 없는 현상. 
 
+
+
+
+## Classical Problems of Synchronization
+
+### Bounded-Buffer Problem(Producer-Consumer Problem)
+
+- Producer process와 consumer process 가 있음(각각 여러 개)
+  - producer : 버퍼에다 데이터를 만들어서 집어 넣는 역할
+  - consumer : 버퍼에서 데이터를 꺼내서 조작
+- 생산자가 둘이 동시에 도착해서 하나의 버퍼에 데이터를 동시에 집어넣으면 문제가 생김 
+  - 한 생산자가 공유 데이터에 lock을 걸어서 다른 프로세스가 접근하지 못하게 한 후 buffer 조작 후 lock을 풀어야 함.
+  - consumer도 마찬가지로 꺼내갈 때 lock을 걸었다 풀었다 해야 함
+- 버퍼가 다 점유된 상황에서는 생산자가 데이터를 집어 넣고 싶어도 못함. consumer가 데이터를 없애줘야 넣을 수 있음 (비어있는 버퍼가 0일 때 소비자가 꺼내갈 때 까지 생산자가 기다림)
+- 버퍼가 모두 비어있을 때 소비자는 자원을 획득할 수 없음. 생산자가 내용을 넣어줄때까지 기다려야함.
+- Semaphore의 역할 
+  - 동시에 접근하지 못하도록 lock을 걸어줌
+  - 버퍼가 비었거나 가득 찼을 때 가용자원의 갯수를 counting하는 변수가 필요함. 
+
+
+
+### Readers and Writer Problem
+
+- 한 process가 DB (공유 데이터) 에 write 중일 때 다른 process 가 접근하면 안됨
+- 읽는 작업은 여럿이 동시에 해도 됨. 
+- reader의 경우 접근할 때와 종료할 때에 mutex 변수(readcount를 동시에 바꾸면 안됨)에 대해 lock을 잠깐 걸었다가 읽는 동안에는 품. 접근할 때 readcount 변수를 1 더하고 종료할 때 1 빼줌.
+- reader의 경우 db에 대한 lock은 readcount가 0에서 1로 될 때 또는 1에서 0이 될 때만 바뀜. 
+- 읽는 작업이 계속 이루어질 경우 reader 의 starvation 발생 가능 .
+
+
+
+### Dining-Philosophers Problem
+
+- 원형식탁에서 철학자는 양쪽의 젓가락을 하나씩 잡아서 밥을 먹을 수 있음. 
+- 양쪽의 철학자가 번갈아서 밥을 계속 먹으면 중간에 앉은 사람은 계속 밥을 못먹음(starvation)
+- Deadlock의 가능성이 있음(모든 철학자가 동시에 왼쪽의 젓가락을 집은 경우)
+  - 해결 방안 
+    - (n-1)명의 철학자만 동시에 앉을 수 있도록 한다.
+    - 젓가락을 두개 모두 집을 수 있을 쌍황에만 젓가락을 집을 수 있게 한다. 
+    - 비대칭 : 짝수 철학자는 왼쪽, 홀수 철학자는 오른쪽 젓가락부터 집도록 한다.
+
+
+
+## Monitor
+
+- semaphore의 문제점
+  - 코딩하기 힘들다
+  - 정확성의 입증이 어렵다.
+  - 자발적 협력이 필요하다
+  - 한번의 실수가 모든 시스템에 치명적 영향 
+
+- 프로그래밍 언어 차원에서 synchrinization 해결
+- 동시 수행중인 프로세스 사이에서 abstract data type의 안전한 공유를 보장하기 위한 high-level synchronization construct
+- 모니터 내에서는 한번에 하나의 프로세스만이 활동 가능
+- 프로그래머가 동기화 제약 조건을 명시적으로 코딩할 필요 없음
+- 프로세스가 모니터 안에서 기다릴 수 있도록 하기 위해 condition variable 사용
+  - condition variable은 wait 과 signal 연산에 의해서만 접근 가능 

@@ -61,7 +61,7 @@
 
 
 
-### FCFS (First-Come First--Served) ( = FIFO)
+### FCFS (First-Come First-Served)
 
 - 비선점형 방법
 - 먼저 온 프로세스를 먼저 처리함
