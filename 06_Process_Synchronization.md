@@ -190,9 +190,13 @@
   - 자발적 협력이 필요하다
   - 한번의 실수가 모든 시스템에 치명적 영향 
 
-- 프로그래밍 언어 차원에서 synchrinization 해결
+- 프로그래밍 언어 차원에서 synchronization 해결
 - 동시 수행중인 프로세스 사이에서 abstract data type의 안전한 공유를 보장하기 위한 high-level synchronization construct
 - 모니터 내에서는 한번에 하나의 프로세스만이 활동 가능
 - 프로그래머가 동기화 제약 조건을 명시적으로 코딩할 필요 없음
 - 프로세스가 모니터 안에서 기다릴 수 있도록 하기 위해 condition variable 사용
   - condition variable은 wait 과 signal 연산에 의해서만 접근 가능 
+  - condition variable은 프로세스를 줄세우기 위한 변수
+  - wait연산 : 오래 기다려야 할 때 process를 잠들게 하기 위한 연산
+  - signal 연산 :  하나의 suspend 된 process를 resume한다. suspend된 연산이 없으면 아무 일도 일어나지 않는다. 
+- semaphore 버전과 monitor 버전의 코드는 쉽게 서로 바꿀 수 있음. 
