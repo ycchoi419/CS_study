@@ -13,6 +13,7 @@
 
 ## Deadlock 발생의 4가지 조건
 
+- 4가지 조건을 모두 만족해야 deadlock 발생함.
 - Mutual exclusion (상호 배제)
   - 매 순간 하나의 프로세스만이 자원을 사용할 수 있음 
   - 자원을 얻었으면 독점적으로 사용함
@@ -121,4 +122,50 @@
 
 
 ### Banker's Algorithm
+
+- 프로세스마다 최대로 사용 가능한 자원의 수를 알고 있음. 
+- 항상 최악의 경우를 가정하고 자원을 할당(현재 사용 가능한 자원이 있어도 할당하지 않음)
+- 최대 요청을 처리할 수 있을 때에만 요청을 받아들임. 
+- 항상 safe state를 유지할 수 있게 함. 
+
+
+
+### Deadlock Detection and Recovery
+
+- deadlock을 일단 생기게 놔두고 문제가 생기면 처리하는 방법
+- Deadlock Detection
+  - Resource type 당 single instance인 경우
+    - 자원 할당 그래프에서의 cycle이 곧 deadlock을 의미
+  - Resource type 당 multiple instance인 경우
+    - banker's 알고리즘과 유사한 방법 활용
+- Wait-for graph 알고리즘 
+  - resource type 당 single instance인 경우 
+  - wait-for graph
+    - 자원할당 그래프의 변형
+    - 프로세스만으로 node구성
+    - Pi가 가지고 있는 자원을 Pk가 기다리는 경우 Pk -> Pi
+  - algorithm
+    - wait-for graph에 사이클일 존재하는지를 주기적으로 조사
+    - O(n**2)의 시간이 걸림 
+- Recovery
+  - Process termination
+    - 프로세스를 종료시키는 방법
+    - Abort all deadlocked processes
+    - Abort one process at a time until the deadlock cycle is eliminated
+  - Resource Preemption
+    - 프로세스로부터 자원을 뺏는 방법
+    - 비용을 최소화 할 victim의 선정
+    - safe state로 rollback하여 process 를 restart
+    - Starvation 문제
+      - 동일한 프로세스가 계속해서 victim으로 선정되는 경우
+      - cost factor에 rollback 횟수도 같이 고려
+
+
+
+### Deadlock Ignorance
+
+- Deadlock이 일어나지 않는다고 생각하고 아무런 조치도 취하지 않음
+  - Deadlock이 매우 드물게 발생하므로 deadlock에 대한 조치 자체가 더 큰 overhead일 수 있음
+  - 만약, 시스템에 deadlock이 발생한 경우 시스템이 비정상적으로 작동하는 것을  사람이 느낀 후 직접 process를 죽이는 등의 방법으로 대처
+  - UNIX, windows 등 대부분의 범용 OS가 채택
 
