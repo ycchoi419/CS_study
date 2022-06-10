@@ -197,15 +197,63 @@
 ### Noncontiguous allocation
 
 - 실제 현대 컴퓨터에서 사용하는 방법
-- Paging
-  - 프로세스의 virtual memory를 동일한 사이즈의 page 단위로 나눔
-  - virtual memory의 내용이 page 단위로 noncontiguous하게 저장됨
-  - 일부는 backing storage에, 일부는 physical memory에 저장
-  - Basic method
-    - physical memory를 동일한 크기의 frame으로 나눔
-    - logical memory를 동일 크기의 page로 나눔 (frame과 같은 크기)
-    - 모든 가용 frame들을 관리
-    - page table을 사용하여 logical address를 physical address로 변환
-    - external fragmentation 발생 안함
-    - internal fragmentation 발생 가능
-    - page 단위로 나누다 보면 마지막에 자투리가 생기게 됨
+
+#### Paging
+
+- 프로세스의 virtual memory를 동일한 사이즈의 page 단위로 나눔
+- virtual memory의 내용이 page 단위로 noncontiguous하게 저장됨
+- 일부는 backing storage에, 일부는 physical memory에 저장
+- Basic method
+  - physical memory를 동일한 크기의 frame으로 나눔
+  - logical memory를 동일 크기의 page로 나눔 (frame과 같은 크기)
+  - 모든 가용 frame들을 관리
+  - **page table**을 사용하여 logical address를 physical address로 변환
+  - external fragmentation 발생 안함
+  - internal fragmentation 발생 가능
+  - page 단위로 나누다 보면 마지막에 자투리가 생기게 됨
+- 페이지 단위 일반적으로 4kB
+
+
+
+#### Implementation of page table
+
+- page table은 각 프로세스마다 존재함
+- Page table은 main memory에 상주
+- page-table base register(PTBR)가 page table을 가리킴
+- page-table length register(PTLR)가 테이블 크기를 보관
+- 모든 메모리 접근 연산에는 2번의 memory adccess 필요
+- page table 접근 1번, 실제 data/instruction 접근 1번 
+- 속도 향상을 위해 associative register 혹은 translation look-aside buffer(TLB)라 불리는 고속의 lookup hardware cache 사용(빈번하게 사용되는 엔트리 몇 개만 가지고 있음)
+
+
+
+#### Effective Access Time
+
+- TLB에 접근하는데 얼만큼의 시간이 걸리는가
+
+- Associative register lookup time = e
+
+- memory cycle time = 1
+
+- hit ratio = a
+
+  - associative register에서 찾아지는 비율
+
+- Effective Access Time(EAT)
+
+  EAT = (1+ e)a + (2 + e)(1 - a) = 2 + e - a
+
+
+
+#### Two-Level Page Table
+
+- 현대의 컴퓨터는 address space가 매우 큰 프로그램을 지원
+  - 32 bit address 사용시 : 2^32 (4G)의 주소 공간
+  - page size가 4K시 1M개의 page table entry 필요
+  - 각 page entry 가 4B시 프로세스당 4M의 page table 필요
+  - 그러나 대부분의 프로그램은 4G의 주소 공간 중 지극히 일부분만 사용하므로 page table 공간이 심하게 낭비됨 
+  - page table 자체를 page로 구성
+  - 사용되지 않는 주소 공간에 대한 outer page table의 엔트리 값은 NULL(대응하는 inner page table이 없음) 
+- 속도에는 이득이 없지만 메모리 이득을 보기 위해 사용 (사용하지 않는 메모리 주소는 저장할 필요가 없음)
+
+- 안쪽 page table의 크기가 page의 크기와 같음 
