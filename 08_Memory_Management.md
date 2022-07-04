@@ -308,13 +308,18 @@
 
 ## Segmentation Architecture 
 
+- 프로세스의 주소 공간을 동일한 크기의 페이지가 아니라 의미 단위인 segment 단위로 나누어서 관리
+
 - Logical address는 segment-number와 offset으로 구성
+
 - Segment table
   - each table entry has:
     - base - starting physical address of the sement
     - limit - length of the segment (segment마다 길이가 다를 수 있음)
+  
 - segment-table base register (STBR)
   - 물리적 메모리에서의 segment table위치
+  
 - segment-table length register (STLR)
   - 프로그램이 사용하는 segment의 수
 
@@ -338,3 +343,16 @@
   - external fragmentation 발생
 
   > segment의 길이가 동일하지 않으므로 가변분할 방식에서와 동일한 문제점들이 발생 
+
+
+
+## Segmentation with Paging
+
+- pure segmentation과의 차이점
+  - segment-table entry가 segment의 base address를 가지고 있는 것이 아니라 segment를 구성하는 page table의 base address를 가지고 있음
+
+
+
+> 주소 변환을 위한 운영체제의 역할 : 없음
+>
+> 결국 하드웨어가 다 해결해야 하는 문제
