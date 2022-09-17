@@ -182,6 +182,12 @@
   - Replacement algorithm 필요(LRU, LFU 등)
 - Unified Buffer Cache
   - 최근의 OS에서는 기존의 buffer cache가 page cache에 통합됨
+  - 리눅스의 경우 구현이 되어 있음
+  - 512byte의 block 단위가 아닌 4kB 단위의 페이지를 사용함
 
-
-
+- 기존의 방식
+  - 첫번째 방법 : read, write  시스템 콜을 사용하여 I/O를 함. 항상 운영체제에 요청을 해서 받아와야 함.
+  - memory mapped I/O : 읽어온 파일 내용을 buffer cache에서 page cache에 copy 해 놓음(오버헤드 발생). 일단 page cache에 카피된 내용은 시스템 콜을 하지 않고 메모리에 접근하여 사용 가능.
+- Unified Buffer cache를 이용한 File I/O
+  - 시스템 콜을 하는 경우 : 운영체제가 디스크 파일 시스템에서 읽어와서 카피해서 사용자 프로그램에 전달
+  - memory mapped I/O : 자신의 주소 영역 중 일부를 파일에 mapping 하는 단계를 지나고 나면 buffer cache에서 직접 읽고 쓰고 할 수 있음
