@@ -87,3 +87,69 @@
 - group columns families into 'super-columns'
 - be able to query all columns with a family or super family
 - similar data grouped together to improve speed
+
+
+
+### hadoop
+
+- Open source implementation of MapReduce algorithm written in java
+- Column-oriented data store
+- Java interface
+- HBase designed specifically to work with Hadoop
+- High-level query language (Pig)
+- Strong support by many vendors 
+
+
+
+### cassandra
+
+- Apache open source column family dataqbase supported by DataStax
+- Peer-to-peer distribution model
+- strong reputation for linear scale out
+- database side security
+- written in java and works well with HDFS and MapReduce
+
+
+
+### Graph Store
+
+- data is stored in a series of nodes, relationships and properties
+- queries are really graph traversals
+- ideal when relationships between data is key: e.g. social networks
+- pros: fast network search, works with public linked data set
+- cons: poor scalability when graphs don't fit into RAM, specialized query languages
+
+
+
+### Document Store
+
+- data stored in nested hierarchies
+- logical data remains stored together as a unit 
+- any item in the document can be queried
+- pros: no object-relational mapping layer, ideal for search
+- cons: complex to implement, incompatible with SQL
+- store machine readable documents together as a single blob of data
+- use JSON or XML formats to store documents
+- no shredding of data into tables
+
+
+
+## Zero Translation (XML)
+
+- XML lives in teh web browser (XForms)
+- REST Interfaces
+- XML in the database(Native XML, XQuery)
+- XRX web Application Architecture
+- No translation
+
+### mongoDB
+
+- open source JSON data store created by 10gen
+- strong developer community
+- implemented in C++ with many APIs (C++, JS, Java, Python ...)
+
+
+
+### Hybrid architectures
+
+- most real world implementations use some combination of NoSQL solutions
