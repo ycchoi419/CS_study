@@ -96,28 +96,33 @@ public class CircularDoublyLinkedList<E> implements ListInterface<E> {
 		
 	}
 
+	public final int NOT_FOUND = -1;
 	@Override
 	public int indexOf(E x) {
-		// TODO Auto-generated method stub
-		return 0;
+		BidirectionalNode<E> currNode = head;
+		for (int i = 0; i < numItems; i++) {
+			currNode = currNode.next;
+			if (((Comparable)(currNode.item)).compareTo(x) == 0) {
+				return i;
+			}
+		}		
+		return NOT_FOUND;
 	}
 
 	@Override
 	public int len() {
-		// TODO Auto-generated method stub
-		return 0;
+		return numItems;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return (numItems==0);
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		numItems = 0;
+		head.prev = head.next = head;
 	}
 
 }
