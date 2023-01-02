@@ -2,6 +2,14 @@ package stack;
 import list.Node;
 
 public class LinkedStack<E> implements StackInterface<E> {
+	
+	public static void main(String[] args) throws Exception {
+		LinkedStack<String> s = new LinkedStack<>();
+		s.push("test 1");
+		s.push("test 2");
+		System.out.println(s.pop());
+		System.out.println(s.pop());
+	}
 	private Node<E> topNode;
 	public LinkedStack() {
 		topNode = null;
